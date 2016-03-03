@@ -7,8 +7,8 @@
 #include "stack.h"
 #include "assert.h"
 
-static void __init test_stack(void)
-{
+static int __init test_stack(void){
+    int res = 0;
     LIST_HEAD(data_stack);
     stack_entry_t *tos = NULL;
     const char *tos_data = NULL;
@@ -18,9 +18,12 @@ static void __init test_stack(void)
     pr_alert("Testing basic stack");
 
     for (i = 0; i != ARRAY_SIZE(test_data); ++i) {
-        stack_push(&data_stack,
-            create_stack_entry((void*)test_data[i])
-        );
+	tos = create_stack_entry((void*)test_data[i]);
+	if (!tos){
+		res = -ENOMEM;
+		break;
+	}
+        stack_push(&data_stack, tos);
     }
 
     for (i = ARRAY_SIZE(test_data) - 1; i >= 0; --i) {
@@ -32,23 +35,53 @@ static void __init test_stack(void)
     }
 
     assert(stack_empty(&data_stack));
+
+    return res;
 }
 
-static void __init print_processes_backwards(void)
-{
-    // TODO
+static int __init print_processes_backwards(void){
+    int res = 0;
+    struct task_struct *task;
+    stack_entry_t *tos = NULL;
+    LIST_HEAD(tasks_stack);
+    char * taskComm = NULL;
+
+    for_each_process(task){
+	taskComm = kmalloc(sizeof(task->comm), GFP_KERNEL);
+	if (!taskComm){
+		res = -ENOMEM;
+		break;
+	}
+	taskComm = get_task_comm(taskComm, task);
+	tos = create_stack_entry((void*)taskComm);
+	if (!tos){
+		res = -ENOMEM;
+		break;
+	}
+	stack_push(&tasks_stack, tos);
+    }
+    while(!stack_empty(&tasks_stack)){
+	tos = stack_pop(&tasks_stack);
+	taskComm = STACK_ENTRY_DATA(tos, char *);
+	printk("%s\n",taskComm);
+	kfree(taskComm);
+	delete_stack_entry(tos);
+    }
+    return res;
 }
 
-static int __init ll_init(void)
-{
+static int __init ll_init(void){
+    int res = 0;
     printk(KERN_ALERT "Hello, linked_lists\n");
-    test_stack();
-    print_processes_backwards();
-    return 0;
+    res = test_stack();
+    if (res){
+	return res;
+    }
+    res = print_processes_backwards();
+    return res;
 }
 
-static void __exit ll_exit(void)
-{
+static void __exit ll_exit(void){
     printk(KERN_ALERT "Goodbye, linked_lists!\n");
 }
 
