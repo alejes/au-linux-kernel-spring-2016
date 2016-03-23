@@ -5,8 +5,8 @@ ifneq ($(KERNELRELEASE),)
 	header-y += vsd_ioctl.h
 	$(MOD_NAME)-objs := module.o
 else
-	KDIR := ../../../linux/
-	VM_PATH := ../../../../vm/
+  KDIR := ../../../../linux/
+  VM_PATH := ../../../../vm/
 all:
 	$(MAKE) -C $(KDIR) M=$$PWD
 	cp $(MOD_NAME).ko $(VM_PATH)/share/

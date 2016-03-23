@@ -4,7 +4,7 @@ ifneq ($(KERNELRELEASE),)
 	obj-m := $(MOD_NAME).o
 	$(MOD_NAME)-objs := module.o
 else
-	KDIR := ../../../linux/
+	KDIR := ../../../../linux/
 	VM_PATH := ../../../../vm/
 all:
 	$(MAKE) -C $(KDIR) M=$$PWD
