@@ -104,7 +104,7 @@ static long vsd_ioctl_set_size(vsd_ioctl_set_size_arg_t __user *uarg)
     if (copy_from_user(&arg, uarg, sizeof(arg)))
         return -EFAULT;
 
-    if (arg.size <= vsd_dev->buf_size) {
+    if ((arg.size >= 0) && (arg.size <= vsd_dev->buf_size)) {
         vsd_dev->buf_size = arg.size;
         return 0;
     } else return -ENOMEM;
