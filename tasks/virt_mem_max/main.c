@@ -10,15 +10,12 @@
 
 int main(){
   size_t mx = std::numeric_limits<size_t>::max();
-  (void) mx;
   size_t total_mem = 0;
   size_t cnt = 0;
   while(mx > 0){
       ++cnt;
-      size_t all = mx;
-      all >>= 1;
-      char *mem = (char*) mmap(NULL, all, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-      if (mem != (char*)-1){
+      size_t all = mx >> 1;
+      if ((char*)mmap(NULL, all, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0) != (char*)-1){
           total_mem += all;
       }
       else{
