@@ -23,4 +23,7 @@ typedef struct vsd_ioctl_set_size_arg {
 #define VSD_IOCTL_SET_SIZE \
     _IOW(VSD_IOCTL_MAGIC, 2, vsd_ioctl_set_size_arg_t)
 
+#define CHECK_DEVICE_OPEN() \
+    if (vsd_dfd < 0){perror( "Device was not opened");  return VSD_FAILURE;}
+
 #endif //_VSD_UAPI_H

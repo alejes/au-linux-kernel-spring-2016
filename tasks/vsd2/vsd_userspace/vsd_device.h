@@ -3,7 +3,14 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include "../vsd_driver/vsd_ioctl.h"
 
+#define VSD "/dev/vsd"
+#define VSD_SUCCESS 0
+#define VSD_FAILURE -1
+
+
+int vsd_dfd;
 /*
  * returns:
  *  <>0 on failure
