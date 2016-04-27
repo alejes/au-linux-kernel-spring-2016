@@ -6,6 +6,8 @@
 #define VSD_CMD_READ 2
 #define VSD_CMD_SET_SIZE 3
 
+#define EXIT_SUCCESS 1
+
 typedef struct vsd_hw_regs {
     // Command to run
     uint8_t cmd;

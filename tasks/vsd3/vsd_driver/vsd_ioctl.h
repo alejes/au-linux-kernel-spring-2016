@@ -9,6 +9,7 @@
 #endif //__KERNEL__
 
 #define VSD_IOCTL_MAGIC 'V'
+#define MAXIMUM_PAGES_ALLOCATE 5
 
 typedef struct vsd_ioctl_get_size_arg {
     size_t size;
@@ -22,5 +23,7 @@ typedef struct vsd_ioctl_set_size_arg {
     _IOR(VSD_IOCTL_MAGIC, 1, vsd_ioctl_get_size_arg_t)
 #define VSD_IOCTL_SET_SIZE \
     _IOW(VSD_IOCTL_MAGIC, 2, vsd_ioctl_set_size_arg_t)
+
+
 
 #endif //_VSD_UAPI_H
